@@ -12,7 +12,11 @@ function randomOrder(meals) {
     const randomIndex = Math.floor(Math.random() * meals.length);
     const randomMeal = meals[randomIndex];
 
-    const nextOrderNumber = sessionStorage.length + 1; // Generate a unique order number based on the current number of orders in sessionStorage
+
+    const storedOrders = sessionStorage.getItem('last_order_number');// Retrieve the last order number from sessionStorage
+
+    const currentOrderNumber = storedOrders ? parseInt(storedOrders, 10) : 0; 
+    const nextOrderNumber = currentOrderNumber + 1; 
     
     // CREATE AN ORDER OBJECT TO STORE IN sessionStorage
     const myOrder = {
@@ -21,11 +25,15 @@ function randomOrder(meals) {
         completionStatus: 'incomplete'
     };
 
-    const orderText = JSON.stringify(myOrder); // Convert the order object to a string for storage
-    sessionStorage.setItem(`order_${nextOrderNumber}`, orderText); // Store the order in sessionStorage with a unique key
-   
-    console.log('saved to sessionStorage', myOrder);
-    return randomMeal;
+    // RETRIEVE THE EXISTING ORDERS FROM sessionStorage, ADD THE NEW ORDER TO THE ARRAY, AND STORE IT BACK IN sessionStorage
+    const randomOrders = sessionStorage.getItem('all_orders');// Retrieve the existing orders from sessionStorage
+
+    const ordersArray = randomOrders ? JSON.parse(randomOrders) : [];// Parse the existing orders or initialize an empty array if none exist
+    ordersArray.push(myOrder);// Add the new order to the orders array
+    sessionStorage.setItem('all_orders', JSON.stringify(ordersArray)); // Store the updated orders array in sessionStorage
+    sessionStorage.setItem('last_order_number', nextOrderNumber.toString()); // Store the latest order number
+    return randomMeal; // Return the randomly selected meal
+
 }
 
 // A FUNCTION TO FETCH MEAL DATA BASED ON THE USER'S INGREDIENT INPUT
@@ -61,18 +69,11 @@ function showIncompleteOrders() {
     const orderDisplay = document.getElementById('incomplete-orders-list');
 
     orderDisplay.innerHTML = ''; // Clear the order display before showing new orders
-    let incompleteOrders  = false;
 
     // LOOP THROUGH sessionStorage TO FIND ALL ORDERS AND CHECK THEIR COMPLETION STATUS
-    const allOrders = [];
-    for (let i = 0; i < sessionStorage.length; i++) {
-        const key = sessionStorage.key(i);
-        if (key.startsWith('order_')) { // Check if the key corresponds to an order
-            const rawOrder = sessionStorage.getItem(key);
-            allOrders.push(JSON.parse(rawOrder)); // Parse the order and add it to the allOrders array
-        }
-    }
-    
+    const sessionOrders = sessionStorage.getItem('all_orders'); // Retrieve the stored orders from sessionStorage
+    const allOrders = sessionOrders ? JSON.parse(sessionOrders) : []; // Parse the stored orders or initialize an empty array if none exist
+
     const incompleteOrdersList = allOrders.filter(order => order.completionStatus === 'incomplete'); // Filter the orders to get only incomplete ones
 
     // CHECK IF INCOMPLETE ORDERS WERE FOUND AND DISPLAY THEM, OTHERWISE DISPLAY A MESSAGE
@@ -87,27 +88,25 @@ function showIncompleteOrders() {
 
 
 // A FUNCTION TO SHOW COMPLETED ORDERS STORED IN sessionStorage AND ALLOW THE USER TO MARK INCOMPLETE ORDERS AS COMPLETED
-function showCompletedOrderList() {
+function sessionCompletedOrderList() {
     const completedOrderDisplay = document.getElementById('completed-orders-list');
 
     completedOrderDisplay.innerHTML = ''; // Clear the completed order display before showing new orders
-    let completedOrders = false;
 
-    for (let i = 0; i < sessionStorage.length; i++) {
-        const key = sessionStorage.key(i);
-        if (key.startsWith('order_')) { // Check if the key corresponds to an order
-            const rawOrder = sessionStorage.getItem(key);
-            const order = JSON.parse(rawOrder);
-            if (order.completionStatus === 'completed') { // Check if the order is completed
-                completedOrderDisplay.innerHTML += `<li>Order #${order.orderNumber}: ${order.description}</li>`; // Display the completed order in the completed order display element
-                completedOrders = true;
-            }
-        }
-    }
-    // CHECK IF NO COMPLETED ORDERS WERE FOUND AND LOG A MESSAGE IF NONE ARE FOUND
-    if (!completedOrders) {
+  // LOOP THROUGH sessionStorage TO FIND ALL ORDERS AND CHECK THEIR COMPLETION STATUS
+    const sessionOrders = sessionStorage.getItem('all_orders'); // Retrieve the stored orders from sessionStorage
+    const allOrders = sessionOrders ? JSON.parse(sessionOrders) : []; // Parse the stored orders or initialize an empty array if none exist
+
+    const completedOrdersList = allOrders.filter(order => order.completionStatus === 'completed'); // Filter the orders to get only completed ones
+
+    if (completedOrdersList.length === 0) {
         completedOrderDisplay.innerHTML = "<p>No completed orders found.</p>"; // Display a message if no completed orders are found
+        return;
     }
+    
+    completedOrdersList.forEach(order => {
+        completedOrderDisplay.innerHTML += `<li>Order #${order.orderNumber}: ${order.description}</li>`; // Display each completed order in the completed order display element
+    });
 }
 
 
@@ -126,24 +125,26 @@ function showCompletedOrders() {
         return;
     }
 
-    const targetKey = `order_${orderNumber}`; // Construct the key for the order based on the user input(
-    const rawOrder = sessionStorage.getItem(targetKey); // Retrieve the order from sessionStorage using the constructed key
+    const rawOrder = sessionStorage.getItem('all_orders'); // Retrieve the order from sessionStorage using the constructed key
+    const allOrders = rawOrder ? JSON.parse(rawOrder) : []; // Parse the stored orders or initialize an empty array if none exist
+    const targetOrderIndex = allOrders.findIndex(order => order.orderNumber === orderNumber); // Find the index of the order with the matching order number
 
-    if (rawOrder === null || rawOrder === undefined) {
+
+
+    if (targetOrderIndex === -1) {
         alert(`Order number ${orderNumber} not found. Please enter a valid order number.`);
         return;
     }
 
 
-    // UPDATE THE ORDER'S COMPLETION STATUS TO 'COMPLETED' AND SAVE IT BACK TO sessionStorage
-    const order = JSON.parse(rawOrder);
-    order.completionStatus = 'completed';
-    sessionStorage.setItem(targetKey, JSON.stringify(order));
+    
+    allOrders[targetOrderIndex].completionStatus = 'completed';
+    sessionStorage.setItem('all_orders', JSON.stringify(allOrders));
 
     alert(`Order number ${orderNumber} marked as completed.`);
 
     showIncompleteOrders(); // Call the function to show incomplete orders after marking one as completed
-    showCompletedOrderList(); // Call the function to show completed orders and allow the user to mark incomplete orders as completed
+    sessionCompletedOrderList(); // Call the function to show completed orders and allow the user to mark incomplete orders as completed
 }
 
 
@@ -194,32 +195,14 @@ if (ingredientForm) {
         }
 
         showIncompleteOrders(); // Call the function to show incomplete orders after placing a new order
-        showCompletedOrderList(); // Call the function to show completed orders and allow the user to mark incomplete orders as completed
+        sessionCompletedOrderList(); // Call the function to show completed orders and allow the user to mark incomplete orders as completed
     });
 }
 
-
-
-// ADD AN EVENT LISTENER TO THE INCOMPLETE ORDERS SECTION TO SHOW INCOMPLETE ORDERS WHEN CLICKED
-const incompleteOrdersSection = document.getElementById('view-incomplete-orders');
-if (incompleteOrdersSection) {
-    incompleteOrdersSection.addEventListener('click', () => {
-        const incompleteOrders = document.getElementById('incomplete-orders-list');
-        if (incompleteOrders) {
-            incompleteOrders.style.display = 'block';
-        }
-        showIncompleteOrders();
-    });
-}
-
-// ADD AN EVENT LISTENER TO THE COMPLETED ORDERS SECTION TO SHOW COMPLETED ORDERS AND ALLOW THE USER TO MARK INCOMPLETE ORDERS AS COMPLETED WHEN CLICKED
-const completedOrdersSection = document.getElementById('view-completed-orders');
-if (completedOrdersSection) {
-    completedOrdersSection.addEventListener('click', () => {
-        const completedOrders = document.getElementById('completed-orders-list');
-        if (completedOrders) {
-            completedOrders.style.display = 'block';
-        }
-        showCompletedOrderList();
+// ADD AN EVENT LISTENER TO THE "VIEW COMPLETED ORDERS" BUTTON TO SHOW COMPLETED ORDERS WHEN CLICKED
+const markCompleteButton = document.getElementById('mark-complete');
+if (markCompleteButton) {
+    markCompleteButton.addEventListener('click', () => {
+        showCompletedOrders();
     });
 }
