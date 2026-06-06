@@ -88,7 +88,7 @@ h4 {
 #order-button {
     background-color: #D4AF3750;
     color: #D4AF37;
-    border: none;
+    border: 1px solid #D4AF37;
     padding: 10px 15px;
     font-size: 1rem;
     cursor: pointer;
