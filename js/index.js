@@ -177,10 +177,8 @@ if (ingredientForm) {
         const mealMessage = document.getElementById('meal-message');
         if (mealMessage) {
 
-            mealMessage.textContent = `Random ${ingredient} meals "${randomMeal.strMeal}"`;
-            mealMessage.style.fontSize = '18px';
-            mealMessage.style.fontWeight = 'bold';
-            mealMessage.appendChild(document.createElement('br')); 
+            mealMessage.innerHTML = `Chefs selection of ${ingredient} inspired meals <br><span id="meal-name">${randomMeal.strMeal}</span>`;
+            mealMessage.appendChild(document.getElementById('meal-name'));
         }
 
         // CREATE AN IMAGE ELEMENT FOR THE RANDOM MEAL AND APPEND IT TO THE GALLERY
@@ -188,7 +186,7 @@ if (ingredientForm) {
             const img = document.createElement('img');
             img.src = randomMeal.strMealThumb; // Use the meal thumbnail as the image source
             img.alt = randomMeal.strMeal || 'Meal Image';// Set alt text for accessibility
-            img.style.width = '200px'; // Set a fixed width for the images
+            img.style.width = '400px'; // Set a fixed width for the images
             img.style.height = 'auto'; // Maintain aspect ratio
             img.style.margin = '10px'; // Add some margin around the images
             gallery.appendChild(img);
