@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/menuStyles.css">
+</head>
+<body>
+    <header>
+        <h1>welcome to<span id="restaurant-name"> 1onLUX</span></h1>  
+    </header>
+    <main id="main-content">
+        <section>
+            <form id="order-form">
+                <h3>Menu</h3>
+                <h4>Enter Your Order</h4>
+                <div id="order-inputs">
+                    <input type="text" id="ingredient" name="ingredient" placeholder="please enter an ingredient" required>
+                    <button id="order-button" type="submit">Order</button>
+                </div>
+            </form>
+            <p id="suggestions">Try: chicken, beef, fish, salmon, garlic, tomatoes....</p>
+            <p id="meal-message"></p>
+            <ul id="meal-gallery">
+                <!-- Meals will be added here -->
+            </ul>
+        </section>
+    
+        <section id="order-management">
+            <div id="incomplete-orders">
+                <h3 class="section-title">Incomplete Orders</h3>
+                <ul class="section-content" id="incomplete-orders-list">
+                    <!-- Incomplete orders will be listed here -->
+                </ul>
+            </div>
+            <div id="completed-orders">
+                <h3 class="section-title">Completed Orders</h3>
+                <ul class="section-content" id="completed-orders-list">
+                    <!-- Completed orders will be listed here -->
+                </ul>
+                <button id="mark-complete">Mark Incomplete Orders as Completed</button>
+            </div>
+        </section>
+    </main> 
+    
+    <script src="../js/index.js"></script>
+    
+</body>
+</html>
