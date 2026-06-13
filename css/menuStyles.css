@@ -1,0 +1,195 @@
+
+@import url(https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic);
+
+@import url(https://fonts.googleapis.com/css?family=Tourney:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic);
+
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #65081F;
+
+}
+
+#restaurant-name {
+    color: #D4AF37;
+    font-size: 3rem;
+    font-weight: 500;
+}
+
+h1 {
+    text-align: center;
+    color: #F9F6F0;
+    font-family: 'montserrat', sans-serif;
+    font-weight: 300;
+    margin-top: 20px;
+    font-size: 2rem;
+}
+
+#main-content {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+    text-align: center;
+}
+
+h3 {
+    color: #D4AF37;
+    font-family: 'montserrat', sans-serif;
+    margin-bottom: 10px;
+    font-size: 2rem;
+    font-weight: 400;
+}
+
+h4 {
+    color: #F9F6F0;
+    font-family: 'lato', sans-serif;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+
+#order-form {
+    width: 100%;
+    max-width: 600px;
+    gap: 15px;
+    margin: 0 auto 20px auto;
+    border: 1px solid #D4AF37;
+    padding: 10px 15px;
+    border-radius: 35px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+
+#order-inputs {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    gap: 15px;
+    margin: 0 auto 20px auto;
+    padding: 10px 15px;
+    align-items: center;
+    flex-direction: row;
+    box-sizing: border-box;
+}
+
+#order-button {
+    background-color: #D4AF3750;
+    color: #D4AF37;
+    border: 1px solid #D4AF37;
+    padding: 10px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+    width: auto;
+    flex-shrink: 0;
+}
+
+#order-button:hover {
+    background-color: #D4AF37;
+    color: #F9F6F0;
+}
+
+#ingredient {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    flex: 1;
+}
+
+
+#suggestions {
+    color: #F9F6F050;
+    font-family: 'lato', sans-serif;
+    margin-bottom: 20px;
+    font-size: 0.875rem;
+    font-weight: 200;
+}
+
+#meal-gallery {
+    width: 100%;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid #D4AF3726;
+    aspect-ratio: 16 / 9;      
+    object-fit: cover;         
+}
+
+#meal-message {
+    color: #F9F6F0;
+    font-family: 'lato', sans-serif;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: 200;
+}
+
+#meal-name {
+    color: #D4AF37;
+    font-family: 'montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 1.25rem;
+}
+
+.section-title {
+    color: #D4AF37;
+    font-family: 'montserrat', sans-serif;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    font-weight: 300;
+    border: 1px solid #D4AF37;
+    border-radius: 20px;
+    padding: 5px 10px;
+}
+
+.section-content {
+    color: #F9F6F0;
+    font-family: 'lato', sans-serif;
+    margin-bottom: 20px;
+    font-size: 0.875rem;
+    font-weight: 200;
+    padding: 10px 15px;
+    max-height: 200px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+#mark-complete {
+    background-color: #D4AF3750;
+    color: #D4AF37;
+    padding: 10px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: 1px solid #D4AF37;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+    width: auto;
+    margin-top: 10px;
+
+}
+
+#mark-complete:hover {
+    background-color: #D4AF37;
+    color: #F9F6F0;
+}
